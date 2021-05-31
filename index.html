@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Current exchange rate</title>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript">
+        const uri = 'https://www.nbrb.by/API/';
+
+        function ratetoday() {
+                $.getJSON(uri + 'ExRates/Rates?periodicity=0')
+                    .done(function (data) {
+                        for (let i=0; i<data.length; i++){
+                            $("#res")
+                                .append($('<tr>')
+                                    .append($('<td>')
+                                        .text((JSON.stringify(data[i].Cur_Abbreviation)).replace(/"/g, ''))
+                                    )
+                                    .append($('<td>')
+                                        .text(JSON.stringify(Number(data[i].Cur_Scale)) + ' ' + (JSON.stringify(data[i].Cur_Name)).replace(/"/g, ''))
+                                    )
+                                    .append($('<td>')
+                                        .text(JSON.stringify(Number(data[i].Cur_OfficialRate)) + ' BYN')
+                                    )
+                                );
+                        }
+                    }).error(function (err) {
+                        alert('ошибка');
+                    });
+        }
+    </script>
+</head>
+<body onload="ratetoday()">
+    <h1>
+        Сurrent exchange rate
+    </h1>
+    <table id="res">
+        <tr style="text-align: center;">
+            <td>Letter code <br> of the currency</td>
+            <td>Number of foreign currency units</td>
+            <td>Official course</td>
+        </tr>
+    </table>
+    <style>
+        body {
+            background-color: rgba(229, 187, 143, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 40px;
+            color: crimson;
+            text-shadow: 2px 2px 3px gray;
+            margin: 0 0 20px 0;
+        }
+        table {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 24px;
+            color: black;
+            text-shadow: 2px 2px 3px white;
+            font-weight: 600;
+        }
+        td {
+            padding: 0 6px;
+        }
+        table, tr, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        tr td:nth-child(1) {
+            text-align: center;
+        }
+        tr td:nth-child(3) {
+            text-align: end;
+        }
+        tr:nth-child(1) ~ tr:hover {
+            background-color: rgba(139, 123, 228, 0.8);
+            cursor: default;
+            color: crimson;
+        } 
+
+    </style>
+</body>
+</html>
